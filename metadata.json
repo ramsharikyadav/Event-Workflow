@@ -1,0 +1,8 @@
+{
+  "name": "MatFlow",
+  "description": "Mobile-friendly material ordering, receipt tracking with photos, and team-based stock management.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": []
+}

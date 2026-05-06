@@ -1,0 +1,100 @@
+{
+  "entities": {
+    "Material": {
+      "title": "Material",
+      "description": "Represents a physical item in stock.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "category": { "type": "string" },
+        "unit": { "type": "string", "description": "e.g., kg, pieces, meters" },
+        "currentStock": { "type": "number" },
+        "minStockLevel": { "type": "number" },
+        "imageUrl": { "type": "string" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "category", "unit", "currentStock"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "A request for more materials.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "materialId": { "type": "string" },
+        "materialName": { "type": "string" },
+        "quantity": { "type": "number" },
+        "status": { "type": "string", "enum": ["pending", "approved", "ordered", "received", "cancelled"] },
+        "orderedBy": { "type": "string", "description": "User UID" },
+        "orderedByName": { "type": "string" },
+        "teamId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["materialId", "quantity", "status", "orderedBy", "teamId", "createdAt"]
+    },
+    "Receipt": {
+      "title": "Receipt",
+      "description": "Confirmation of material arrival with photo evidence.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "orderId": { "type": "string" },
+        "materialId": { "type": "string" },
+        "quantityReceived": { "type": "number" },
+        "photoUrl": { "type": "string" },
+        "receivedBy": { "type": "string", "description": "User UID" },
+        "receivedAt": { "type": "string", "format": "date-time" },
+        "notes": { "type": "string" }
+      },
+      "required": ["orderId", "materialId", "quantityReceived", "receivedBy", "receivedAt"]
+    },
+    "Team": {
+      "title": "Team",
+      "description": "A group of members who share materials.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "members": { "type": "array", "items": { "type": "string" }, "description": "List of User UIDs" }
+      },
+      "required": ["name", "members"]
+    },
+    "User": {
+      "title": "User",
+      "description": "Application user profile.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "role": { "type": "string", "enum": ["admin", "member"] },
+        "teamId": { "type": "string" }
+      },
+      "required": ["uid", "email"]
+    }
+  },
+  "firestore": {
+    "materials/{materialId}": {
+      "schema": "Material",
+      "description": "Global list of available material types (could be per-team, but starting global)."
+    },
+    "orders/{orderId}": {
+      "schema": "Order",
+      "description": "Material orders made by team members."
+    },
+    "receipts/{receiptId}": {
+      "schema": "Receipt",
+      "description": "Evidence of materials being received."
+    },
+    "teams/{teamId}": {
+      "schema": "Team",
+      "description": "Team definitions."
+    },
+    "users/{userId}": {
+      "schema": "User",
+      "description": "User profiles and team associations."
+    }
+  }
+}
